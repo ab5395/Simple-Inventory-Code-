@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "TeacherForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="font-family: times-new-roman; font-size: 17px;">
+    <div align="center">
+        <h2>Teacher List</h2>
+        <table border="1">
+            <tr>
+                <td></td>
+                <th>
+                    Teacher
+                </th>
+            </tr>
+            @foreach (var data in Model)
+            {
+                <tr>
+                    <td>
+                        <b><a href="@Url.Action("EditTeacher", "Test", new {id = data.TeacherId})" style="color: black;">Edit</a></b>
+                    </td>
+                    <td>
+                        @data.TeacherName
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div align="center">
+        <form name="form1" method="post" action="/Test/TeacherForm">
+            <table>
+                <tr style="visibility: hidden">
+                    <td>
+                        ID
+                    </td>
+                    <td>
+                        <input type="text" name="txtID" value="@ViewData["TeacherID"]" />
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td>
+                        Teacher
+                    </td>
+                    <td>
+                        <input type="text" name="txtName" value="@ViewData["Teacher"]" />
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td></td>
+                    <td align="center">
+                        <input type="submit" name="btnInsert" value="Insert" />
+                        <input type="submit" name="btnUpdate" value="Update" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+

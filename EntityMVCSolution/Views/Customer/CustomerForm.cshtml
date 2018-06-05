@@ -1,0 +1,258 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CustomerForm</title>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var path = "@Url.Action("BindStateList", "Basic")";
+            $("#txtCountry").change(function () {
+                $('#txtState').empty();
+                $.getJSON('/Basic/BindStateList/' + $('#txtCountry').val(), function (data) {
+                    var items = '<option value="">Select a State</option>';
+                    $.each(data, function (i, state) {
+                        items += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                    });
+                    $('#txtState').html(items);
+                });
+            });
+
+            $("#txtState").change(function () {
+                $('#txtCity').empty();
+                $.getJSON('/Customer/BindCityList/' + $('#txtState').val(), function (data) {
+                    var items = '<option value="">Select a City</option>';
+                    $.each(data, function (i, state) {
+                        items += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                    });
+                    $('#txtCity').html(items);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <div align="center">
+            <table border="1">
+                <tr>
+                    <td></td>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Address
+                    </th>
+                    <th>
+                        City
+                    </th>
+                    <th>
+                        State
+                    </th>
+                    <th>
+                        Country
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+                @foreach (var data in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("EditCustomer", "Customer", new {customerId = data.CustomerID})">Edit</a>
+                            <a href="@Url.Action("DeleteCustomer", "Customer", new {customerId = data.CustomerID})">Delete</a>
+                        </td>
+                        <td>
+                            @data.Name
+                        </td>
+                        <td>
+                            @data.Address
+                        </td>
+                        <td>
+                            @data.City.City1
+                        </td>
+                        <td>
+                            @data.City.State.State1
+                        </td>
+                        <td>
+                            @data.City.State.Country.Country1
+                        </td>
+                        <td>
+                            @{
+                                if (data.IsActive.ToString() == "True")
+                                {
+                                    <a href="@Url.Action("UpdateCustomerStatus", "Customer", new {customerId = data.CustomerID, status = 1})">
+                                        <img src="~/Images/true.png" height="30px" width="40px" />
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("UpdateCustomerStatus", "Customer", new {customerId = data.CustomerID, status = 0})">
+                                        <img src="~/Images/false.ico" height="20px" width="30px" />
+                                    </a>
+                                    
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        
+        <div>
+            <form name="form1" id="form1" method="post" action="/Customer/CustomerForm">
+                <table>
+                    <tr>
+                        <th>Customer Form</th>
+                    </tr>
+                    <tr style="visibility: hidden">
+                        <td>
+                            CustomerID
+                        </td>
+                        <td>
+                            <input type="text" name="txtCustomerID" id="txtCustomerID" value="@ViewData["CustomerId"]" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Name
+                        </td>
+                        <td>
+                            <input type="text" name="txtName" id="txtName" value="@ViewData["Name"]" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address
+                        </td>
+                        <td>
+                            <input type="text" name="txtAddress" id="txtAddress" value="@ViewData["Address"]" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Country
+                        </td>
+                        <td>
+                            <select name="txtCountry" id="txtCountry" required>
+
+                                @{
+                                    string country = null;
+                                    int cid = 0;
+                                    if (ViewData["CountryID"] != null)
+                                    {
+                                        country = ViewData["Country"].ToString();
+                                        cid = int.Parse(ViewData["CountryID"].ToString());
+                                    }
+
+                                    if (country != null)
+                                    {
+                                        <option value="@cid">@country</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="">Select Country</option>
+                                    }
+                                }
+
+                                @foreach (var countrydata in ViewBag.CountryList)
+                                {
+                                    if (cid == countrydata.CountryID)
+                                    {
+                                    }
+                                    else
+                                    {
+                                        <option value="@countrydata.CountryID">@countrydata.Country1</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            State
+                        </td>
+                        <td>
+                            <select name="txtState" id="txtState" required >
+                                @if (ViewData["StateId"] == null)
+                                {
+                                    <option value="">Select State</option>
+                                }
+                                <option value="@ViewData["StateId"]">@ViewData["State"]</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            City
+                        </td>
+                        <td>
+                            <select name="txtCity" id="txtCity" required >
+                                @if (ViewData["CityId"] == null)
+                                {
+                                    <option value="">Select City</option>
+                                }
+                                <option value="@ViewData["CityId"]">@ViewData["City"]</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Status
+                        </td>
+                        <td>
+                            <select name="txtStatus" id="txtStatus" >
+
+                                @{
+                                    string status = null;
+                                    if (ViewData["Status"] != null)
+                                    {
+                                        status = ViewData["Status"].ToString();
+                                    }
+
+                                    if (status == "True")
+                                    {
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    }
+                                    else if (status == "False")
+                                    {
+                                        <option value="False">No</option>
+                                        <option value="True">Yes</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="True">Yes</option>
+                                        <option value="False">no</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" name="btnInsert" value="Insert" />
+                            <input type="submit" name="btnUpdate" value="Update" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            
+            <a href="@Url.Action("Index", "Test")">
+                <input type="button" name="btnBack" value="Back" id="btnBack" style="height: 31px; width: 116px;" />
+            </a>
+        </div>
+    </div>
+</body>
+</html>

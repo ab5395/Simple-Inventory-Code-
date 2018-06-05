@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div style="font-family: times-new-roman; font-size: 17px;">
+    <div align="center">
+        <h2>Standard List</h2>
+        <table border="1">
+            <tr>
+                <td></td>
+                <th>
+                    Standard
+                </th>
+            </tr>
+            @foreach (var data in Model)
+            {
+                <tr>
+                    <td>
+                        <b><a href="@Url.Action("EditStandard", "Test", new {id = data.StandardId})" style="color: black;">Edit</a></b>
+                    </td>
+                    @*<td>
+                        <b><a href="@Url.Action("DeleteStandard", "Test", new {id = data.StandardId})" style="color: black;">Delete</a></b>
+                    </td>*@
+                    <td>
+                        @data.StandardName
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div align="center">
+        <form name="form1" method="post" action="/Test/Index">
+            <table>
+                <tr style="visibility: hidden">
+                    <td>
+                        ID
+                    </td>
+                    <td>
+                        <input type="text" name="txtID" value="@ViewData["StandardID"]" />
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td>
+                        Standard
+                    </td>
+                    <td>
+                        <input type="text" name="txtName" value="@ViewData["Standard"]" />
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td></td>
+                    <td align="center">
+                        <input type="submit" name="btnInsert" value="Insert" />
+                        <input type="submit" name="btnUpdate" value="Update" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>

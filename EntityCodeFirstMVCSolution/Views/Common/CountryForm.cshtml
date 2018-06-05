@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "CountryForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div align="center" style="font-family: times-new-roman; font-size: 17px;">
+    <h2>CountryForm</h2>
+    <table border="1">
+        <tr>
+            <td></td>
+            <th colspan="2">
+                Country
+            </th>
+        </tr>
+        @{int i = 0;}
+        @foreach (var data in Model)
+        {
+            i = i + 1;
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @data.CountryName
+                </td>
+                <td>
+                    <b><a href="@Url.Action("EditCountry", "Common", new {id = data.CountryId})" style="color: black;">Edit</a></b>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div align="center">
+        @using (Html.BeginForm("CountryForm", "Common", FormMethod.Post))
+        {
+        <table>
+            <tr style="visibility: hidden">
+                <td>
+                    ID
+                </td>
+                <td>
+                    @Html.TextBox("txtID", ViewData["CountryId"])
+                </td>
+            </tr>
+            <tr style="visibility: visible">
+                <td>
+                    Country
+                </td>
+                <td>
+                    @Html.TextBox("txtCountry", ViewData["Country"])
+
+                </td>
+            </tr>
+            <tr style="visibility: visible">
+                <td></td>
+                <td align="center">
+                    <input type="submit" name="btnInsert" value="Insert" />
+                    <input type="submit" name="btnUpdate" value="Update" />
+                </td>
+            </tr>
+        </table>
+        }
+    </div>
+</div>
+

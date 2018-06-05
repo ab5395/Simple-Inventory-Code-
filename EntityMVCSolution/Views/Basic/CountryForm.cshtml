@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Country Form</title>
+</head>
+<body>
+    <div>
+        <div align="center">
+            <table border="1">
+                <tr>
+                    <td></td>
+                    <td>
+                        Country
+                    </td>
+                </tr>
+                @foreach (var data in Model)
+            {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("EditCountry", "Basic", new {countryId = data.CountryID})">Edit</a>
+                        </td>
+                        <td>
+                            @data.Country1
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+        <div align="center">
+            <form name="form1" id="form1" method="post" action="/Basic/CountryForm">
+                <table>
+                    <tr>
+                        <th>Country Form</th>
+                    </tr>
+                    <tr style="visibility: hidden">
+                        <td>
+                            CountryID
+                        </td>
+                        <td>
+                            <input type="text" name="txtCountryID" id="txtCountryID" value="@ViewData["CountryID"]" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Country
+                        </td>
+                        <td>
+                            <input type="text" name="txtCountry" id="txtCountry" value="@ViewData["Country"]" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" name="btnInsert" value="Insert" />
+                            <input type="submit" name="btnUpdate" value="Update" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            
+            <a href="@Url.Action("Index", "Test")">
+                <input type="button" name="btnBack" value="Back" id="btnBack" style="height: 31px; width: 116px;" />
+            </a>
+        </div>
+    </div>
+</body>
+</html>

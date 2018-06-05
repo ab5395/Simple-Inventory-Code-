@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "StateForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div align="center" style="font-family: times-new-roman; font-size: 17px;">
+    <h2>State Form</h2>
+    <table border="1">
+        <tr>
+            <td></td>
+            <th>
+                State
+            </th>
+            <th>
+                Country
+            </th>
+            <th></th>
+        </tr>
+        @{int i = 0;}
+        @foreach (var data in Model)
+        {
+            i = i + 1;
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @data.StateName
+                </td>
+                <td>
+                    @data.Country.CountryName
+                </td>
+                <td>
+                    <b><a href="@Url.Action("EditState", "Common", new {id = data.StateId})" style="color: black;">Edit</a></b>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div align="center">
+        @using (Html.BeginForm("StateForm", "Common", FormMethod.Post))
+        {
+            <table>
+                <tr style="visibility: hidden">
+                    <td>
+                        ID
+                    </td>
+                    <td>
+                        @Html.TextBox("txtID", ViewData["StateId"])
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td>
+                        State
+                    </td>
+                    <td>
+                        @Html.TextBox("txtState", ViewData["State"])
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td>
+                        Country
+                    </td>
+                    <td>
+                        @Html.DropDownList("CountryList", "--Select Country--")
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td></td>
+                    <td align="center">
+                        <input type="submit" name="btnInsert" value="Insert" />
+                        <input type="submit" name="btnUpdate" value="Update" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+

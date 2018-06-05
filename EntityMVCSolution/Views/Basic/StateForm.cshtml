@@ -1,0 +1,121 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>StateForm</title>
+</head>
+<body>
+<div>
+    <div align="center">
+        <table border="1">
+            <tr>
+                <td></td>
+                <td>
+                    State
+                </td>
+                <td>
+                    Country
+                </td>
+            </tr>
+            @foreach (var data in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("EditState", "Basic", new {stateId = data.StateID})">Edit</a>
+                    </td>
+                    <td>
+                        @data.State1
+                    </td>
+                    <td>
+                        @data.Country.Country1
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div align="center">
+        <form name="form1" id="form1" method="post" action="/Basic/StateForm">
+            <table>
+                <tr>
+                    <th>City Form</th>
+                </tr>
+                <tr style="visibility: hidden">
+                    <td>
+                        StateID
+                    </td>
+                    <td>
+                        <input type="text" name="txtStateID" id="txtStateID" value="@ViewData["StateID"]" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Copuntry
+                    </td>
+                    <td>
+                        <select name="txtCountry" id="txtCountry">
+                            
+                            @{
+                                string country = null;
+                                int cid=0;
+                                if (ViewData["CountryID"] != null)
+                                {
+                                    country = ViewData["Country"].ToString();
+                                    cid = int.Parse(ViewData["CountryID"].ToString());
+                                }
+                                
+                                if (country != null)
+                                {
+                                    <option value="@cid">@country</option>
+                                }
+                                else
+                                {
+                                    <option>Select Country</option>
+                                }
+                            }
+                            
+                            @foreach (var countrydata in ViewBag.CountryList)
+                            {
+                                if (cid == countrydata.CountryID)
+                                {
+                                }
+                                else
+                                {
+                                    <option value="@countrydata.CountryID">@countrydata.Country1</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        State
+                    </td>
+                    <td>
+                        <input type="text" name="txtState" id="txtState" value="@ViewData["State"]" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" name="btnInsert" value="Insert" />
+                        <input type="submit" name="btnUpdate" value="Update" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        
+        <a href="@Url.Action("Index", "Test")">
+            <input type="button" name="btnBack" value="Back" id="btnBack" style="height: 31px; width: 116px;" />
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+﻿@model EntityCodeFirstMVCSolution.Models.PartialModel2
+@{
+    ViewBag.Title = "PartialFormExample";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PartialFormExample</h2>
+@Html.Partial("_View1",Model.PartialModel)
+@ViewBag.Message

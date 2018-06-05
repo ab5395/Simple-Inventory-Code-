@@ -1,0 +1,153 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Product Form</title>
+</head>
+<body>
+    <div>
+        <div align="center">
+            <table border="1">
+                <tr>
+                    <td></td>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Sale MRP
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+                @foreach (var data in Model)
+            {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("EditProduct", "Product", new {productId = data.ProductID})">Edit</a>
+                            <a href="@Url.Action("DeleteProduct", "Product", new {productId = data.ProductID})">Delete</a>
+                        </td>
+                        <td>
+                            @data.Name
+                        </td>
+                        <td>
+                            @data.Quantity
+                        </td>
+                        <td>
+                            @data.SaleMRP
+                        </td>
+                        <td>
+                            @{
+                                if (data.IsActive.ToString() == "True")
+                                {
+                                    <a href="@Url.Action("UpdateProductStatus", "Product", new {productId = data.ProductID, status = 1})">
+                                        <img src="~/Images/true.png" height="30px" width="40px" />
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("UpdateProductStatus", "Product", new {productId = data.ProductID, status = 0})">
+                                        <img src="~/Images/false.ico" height="20px" width="30px" />
+                                    </a>
+
+                                }
+                            }
+                        </td>
+                    </tr>
+                                }
+            </table>
+        </div>
+        
+        <div>
+            <form name="form1" id="form1" method="post" action="/Product/Index">
+                <table>
+                    <tr>
+                        <th>Product Form</th>
+                    </tr>
+                    <tr style="visibility: hidden">
+                        <td>
+                            ProdutID
+                        </td>
+                        <td>
+                            <input type="text" name="txtProductID" id="txtProductID" value="@ViewData["ProductID"]" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Name
+                        </td>
+                        <td>
+                            <input type="text" name="txtName" id="txtName" value="@ViewData["Name"]" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Sale MRP
+                        </td>
+                        <td>
+                            <input type="text" name="txtSaleMRP" id="txtSaleMRP" value="@ViewData["SaleMRP"]" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Quantity
+                        </td>
+                        <td>
+                            <input type="text" name="txtQuantity" id="txtQuantity" value="@ViewData["Quantity"]" required />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Status
+                        </td>
+                        <td>
+                            <select name="txtStatus" id="txtStatus">
+
+                                @{
+                                    string status = null;
+                                    if (ViewData["Status"] != null)
+                                    {
+                                        status = ViewData["Status"].ToString();
+                                    }
+
+                                    if (status == "True" || status==null)
+                                    {
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    }
+                                    else if (status == "False")
+                                    {
+                                        <option value="False">No</option>
+                                        <option value="True">Yes</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" name="btnInsert" value="Insert" />
+                            <input type="submit" name="btnUpdate" value="Update" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            
+            <a href="@Url.Action("Index", "Test")">
+                <input type="button" name="btnBack" value="Back" id="btnBack" style="height: 39px;width: 126px" />
+            </a>
+        </div>
+    </div>
+</body>
+</html>

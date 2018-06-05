@@ -1,0 +1,91 @@
+﻿@model PagedList.IPagedList<EntityMVCSolution.Models.Bill>
+@using PagedList.Mvc;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>BillList</title>
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div>
+        <h3>
+            Bill List
+        </h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>
+
+                    </th>
+                    <th>
+                        Bill No
+                    </th>
+                    <th>
+                        Customer name
+                    </th>
+                    <th>
+                        Date Time
+                    </th>
+                    <th>
+                        Shipping Charge
+                    </th>
+                    <th>
+                        Grand Total
+                    </th>
+                    <th>
+                        Order Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var data in Model)
+            {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("BillDetail", "Order", new { billid = data.BillID })">Details</a>
+                        </td>
+                        <td>
+                            @data.BillID
+                        </td>
+                        <td>
+                            @data.Customer.Name
+                        </td>
+                        <td>
+                            @data.BillDate
+                        </td>
+                        <td>
+                            @data.ShippingCharge
+                        </td>
+                        <td>
+                            @data.GrandTotal
+                        </td>
+                        <td>
+                            @{
+                                if (data.IsCanceled.ToString() == "True")
+                                {
+                                    <p>Canceled</p>
+                                }
+                                else
+                                {
+                                    <p>Completed</p>
+                                }
+                            }
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("BillList",    new { page}))
+        <a href="@Url.Action("Index", "Test")">
+            <input type="button" name="btnBack" value="Back" id="btnBack" style="height: 31px; width: 116px;" />
+        </a>
+    </div>
+</body>
+</html>

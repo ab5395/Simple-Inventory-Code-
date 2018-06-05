@@ -1,0 +1,158 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>InvoiceForm</title>
+</head>
+<body>
+    <div>
+        <div>
+            <h3 align="center">
+                Invoice Data
+            </h3>
+
+            <table>
+                <tr>
+                    <td>
+                        Invoice(Bill) No
+                    </td>
+                    <td>
+                        <input name="txtBillNo" type="text" value="@ViewData["BillID"]" readonly="readonly" id="txtBillNo" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Customer Name
+                    </td>
+                    <td>
+                        <input name="txtName" type="text" value="@ViewData["Name"]" readonly="readonly" id="txtName" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Address
+                    </td>
+                    <td>
+                        <textarea name="txtAddress" rows="2" cols="20" readonly="readonly" id="txtAddress" style="height:72px;width:243px;">
+                            @ViewData["Address"]
+                        </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        City
+                    </td>
+                    <td>
+                        <input name="txtCity" type="text" value="@ViewData["City"]" readonly="readonly" id="txtCity" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        State
+                    </td>
+                    <td>
+                        <input name="txtState" type="text" value="@ViewData["State"]" readonly="readonly" id="txtState" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Country
+                    </td>
+                    <td>
+                        <input name="txtCountry" type="text" value="@ViewData["Country"]" readonly="readonly" id="txtCountry" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Shipping Charge
+                    </td>
+                    <td>
+                        <input name="txtShippingcharge" type="text" value="@ViewData["ShippingCharge"]" readonly="readonly" id="txtShippingcharge" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Total Product Charge
+                    </td>
+                    <td>
+                        <input name="txtTotalProductCharge" type="text" value="@ViewData["Total"]" readonly="readonly" id="txtTotalProductCharge" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Total Charge
+                    </td>
+                    <td>
+                        <input name="txtTotalCharge" type="text" value="@ViewData["GrandTotal"]" readonly="readonly" id="txtTotalCharge" style="height:35px;width:180px;" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div align="center" style="margin-top: 50px">
+            <h3>Product Detail</h3>
+            <div>
+                <table cellspacing="0" rules="all" border="1" id="GridView1" style="border-collapse:collapse;">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">ProductName</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">DisPercentage</th>
+                        <th scope="col">DisValue</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                    @foreach (var data in Model)
+                    {
+                        int i = 1;
+                        <tr>
+                            <td>
+                                @i
+                            </td>
+                            <td>
+                                @data.Product.Name
+                            </td>
+                            <td>
+                                @data.Quantity
+                            </td>
+                            <td>
+                                @data.Price
+                            </td>
+                            <td>
+                                @data.DiscountPercentage
+                            </td>
+                            <td>
+                                @data.DiscountValue
+                            </td>
+                            <td>
+                                @data.ProductTotal
+                            </td>
+                        </tr>
+                        i = i + 1;
+                    }
+                </table>
+            </div>
+            <br />
+            @{ string status = ViewData["Status"].ToString(); }
+            @if (status == "False")
+            {
+                <a href="@Url.Action("CancelBillOrder", "Order", new { billid = ViewData["BillID"] })">
+                    <input type="button" name="btnCancelOrder" value="Cancel Order" id="btnCancelOrder" style="height:38px;width:126px;" />
+                </a>
+            }
+            @*<input type="button" name="btnCancelOrder" value="Cancel Order" id="btnCancelOrder" style="height:38px;width:126px;" />*@
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="@Url.Action("BillList", "Order", new { billid = ViewData["BillID"] })">
+                <input type="button" name="btnBack" value="Back To List" id="btnBack" style="height:38px;width:126px;" />
+            </a>
+
+        </div>
+
+    </div>
+</body>
+</html>

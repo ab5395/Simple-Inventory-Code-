@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "CityForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/jscript">
+    $(document).ready(function () {
+        var path = "@Url.Action("StateList", "Common")";
+        $("#CountryList").change(function () {
+            $('#StateList').empty();
+            $.getJSON('/Common/StateList/' + $('#CountryList').val(), function (data) {
+                var items = '<option value="">--Select State--</option>';
+                $.each(data, function (i, state) {
+                    items += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                });
+                $('#StateList').html(items);
+            });
+        });
+    });
+</script>
+
+<div align="center" style="font-family: times-new-roman; font-size: 17px;">
+    <h2>City Form</h2>
+    <table border="1">
+        <tr>
+            <td></td>
+            <th>
+                City
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Country
+            </th>
+            <th></th>
+        </tr>
+        @{int i = 0;}
+        @foreach (var data in Model)
+        {
+            i = i + 1;
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @data.CityName
+                </td>
+                <td>
+                    @data.StateName
+                </td>
+                <td>
+                    @data.CountryName
+                </td>
+                <td>
+                    <b><a href="@Url.Action("EditCity", "Common", new {id = data.CityId})" style="color: black;">Edit</a></b>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div align="center">
+        @using (Html.BeginForm("CityForm", "Common", FormMethod.Post))
+        {
+            <table>
+                <tr style="visibility: hidden">
+                    <td>
+                        ID
+                    </td>
+                    <td>
+                        @Html.TextBox("txtID", ViewData["CityId"])
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td>
+                        City
+                    </td>
+                    <td>
+                        @Html.TextBox("txtCity", ViewData["City"])
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td>
+                        Country
+                    </td>
+                    <td>
+                        @Html.DropDownList("CountryList", "--Select Country--")
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td>
+                        State
+                    </td>
+                    <td>
+                        @Html.DropDownList("StateList", "--Select State--")
+                    </td>
+                </tr>
+                <tr style="visibility: visible">
+                    <td></td>
+                    <td align="center">
+                        <input type="submit" name="btnInsert" value="Insert" />
+                        <input type="submit" name="btnUpdate" value="Update" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+

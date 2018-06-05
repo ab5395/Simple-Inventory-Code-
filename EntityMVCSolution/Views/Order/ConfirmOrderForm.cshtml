@@ -1,0 +1,234 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ConfirmOrderForm</title>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#txtShippingCharge").change(function () {
+                //$("#txtTotal").val(3);
+                //alert("Chaneg");
+                var x = document.getElementById("txtShippingCharge").value;
+                var y = document.getElementById("txtTotal").value;
+                document.getElementById("txtGrandTotal").value = parseFloat(x) + parseFloat(y);
+            });
+
+            $("#txtCustomer").change(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/GetAddress",
+                    data: '{id: "' + $("#txtCustomer").val() + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        //alert(response);
+                        $('#txtAddress').val(response);
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/GetCity",
+                    data: '{id: "' + $("#txtCustomer").val() + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        //alert(response);
+                        $('#txtCity').val(response);
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/GetState",
+                    data: '{id: "' + $("#txtCustomer").val() + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        //alert(response);
+                        $('#txtState').val(response);
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "/Order/getCountry",
+                    data: '{id: "' + $("#txtCustomer").val() + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        //alert(response);
+                        $('#txtCountry').val(response);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div align="center">
+    <form name="form1" id="form1" method="post" action="/Order/ConfirmOrderForm">
+        <table>
+            <thead>
+            <tr>
+                <th>
+                    Bill Form
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    Customer
+                </td>
+                <td>
+                    <select name="txtCustomer" id="txtCustomer" required>
+                        <option value="">Select Customer</option>
+                        @foreach (var data in ViewBag.CustomerList)
+                        {
+                            <option value="@data.CustomerID">@data.Name</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Address
+                </td>
+                <td>
+                    <input type="text" name="txtAddress" id="txtAddress" readonly="readonly"  style="height: 50px;width: 250px"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Country
+                </td>
+                <td>
+                    <input type="text" name="txtCountry" id="txtCountry" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    State
+                </td>
+                <td>
+                    <input type="text" name="txtState" id="txtState" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    City
+                </td>
+                <td>
+                    <input type="text" name="txtCity" id="txtCity" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Shipping Charge
+                </td>
+                <td>
+                    <input type="text" name="txtShippingCharge" id="txtShippingCharge"  />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Total
+                </td>
+                <td>
+                    <input type="text" name="txtTotal" id="txtTotal" readonly="readonly" value="@ViewData["Total"]" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Grand Total
+                </td>
+                <td>
+                    <input type="text" name="txtGrandTotal" id="txtGrandTotal" readonly="readonly" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                           
+                </td>
+                <td>
+                    <input type="submit" name="btnGenerateBill" value="Generate Bill" readonly="readonly" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+    
+    <div align="center" style="margin-top: 20px">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>
+
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Product Price
+                    </th>
+                    <th>
+                        Discount Percentage
+                    </th>
+                    <th>
+                        Discount Value
+                    </th>
+                    <th>
+                        Total Price
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var data in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("ConfirmDeleteQuantity", "Order", new {productId = data.ProductId})">Delete</a>
+                        </td>
+                        <td>
+                            @data.ProductName
+                        </td>
+                        <td>
+                            @data.Quantity
+                        </td>
+                        <td>
+                            @data.Price
+                        </td>
+                        <td>
+                            @data.DisPercentage
+                        </td>
+                        <td>
+                            @data.DisValue
+                        </td>
+                        <td>
+                            @data.Total
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div align="center" style="margin-top: 15px;">
+        <a href="@Url.Action("OrderDelete", "Order")">
+            <input type="button" name="btnCancel" value="Cancel Order" style="height: 39px;width: 126px" />
+        </a>
+    </div>
+</body>
+</html>
